@@ -117,6 +117,42 @@ function decifrarMetodo2(msgCifrada, chave) {
   return msgOriginal
 }
 
+function cifrarMetodo3(msg, chave, letra, rotacao) {
+  var discoMovel = 'gklnprtvz&xysomqihfdbace'
+  var msgCifrada = ""
+  var posChave = discoMovel.indexOf(chave)
+  var posLetra = discoFixo.indexOf(letra)
+  if (posChave != posLetra) {
+    discoMovel = girarDiscoMovel(discoMovel, chave, posLetra)
+  }
+  for (var i = 0; i < msg.length; i++) {
+    var posLetraDiscoMovel = discoFixo.toLowerCase().indexOf(msg[i])
+    if (posLetraDiscoMovel != -1)
+      msgCifrada += discoMovel[posLetraDiscoMovel]
+    posChave = discoMovel.indexOf(chave)
+    discoMovel = girarDiscoMovel(discoMovel, chave, posChave + rotacao)
+  }
+  return msgCifrada
+}
+
+function decifrarMetodo3(msgCifrada, chave, letra, rotacao) {
+  var discoMovel = 'gklnprtvz&xysomqihfdbace'
+  var msgOriginal = ""
+  var posChave = discoMovel.indexOf(chave)
+  var posLetra = discoFixo.indexOf(letra)
+  if (posChave != posLetra) {
+    discoMovel = girarDiscoMovel(discoMovel, chave, posLetra)
+  }
+  for (var i = 0; i < msgCifrada.length; i++) {
+    var posLetraDiscoFixo = discoMovel.toLowerCase().indexOf(msgCifrada[i])
+    if (posLetraDiscoFixo != -1)
+      msgOriginal += discoFixo[posLetraDiscoFixo]
+    posChave = discoMovel.indexOf(chave)
+    discoMovel = girarDiscoMovel(discoMovel, chave, posChave + rotacao)
+  }
+  return msgOriginal
+}
+
 var op, metodo;
 do {
   op = prompt("---------------CIFRA DE ALBERTI-------------\n1 - Cifrar\n2 - Decifrar\n0 - Sair")
@@ -136,6 +172,12 @@ do {
           var chave = prompt("Digite a chave do disco móvel")
           alert(cifrarMetodo2(fraseCifrar, chave.toLowerCase()))
           break
+        case '3':
+          var chave = prompt("Digite a chave do disco móvel")
+          var letra = prompt("Digite a letra maiúscula do disco fixo")
+          var rotacao = prompt("Digite o número da chave de deslocamento")
+          alert(cifrarMetodo3(fraseNormalizada, chave.toLowerCase(), letra.toUpperCase(), parseInt(rotacao)))
+          break
       }
       break
     case '2':
@@ -149,6 +191,12 @@ do {
         case '2':
           var chave = prompt("Digite a chave do disco móvel")
           alert(decifrarMetodo2(fraseCifrada, chave.toLowerCase()))
+          break
+        case '3':
+          var chave = prompt("Digite a chave do disco móvel")
+          var letra = prompt("Digite a letra maiúscula do disco fixo")
+          var rotacao = prompt("Digite o número da chave de deslocamento")
+          alert(decifrarMetodo3(fraseCifrada, chave.toLowerCase(), letra.toUpperCase(), parseInt(rotacao)))
           break
       }
       break
